@@ -5,8 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -26,7 +30,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         loadFragment( new DashboardFragment() );
     }
 
-    public boolean loadFragment( Fragment fragment ){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.option_menu, menu);
+        MenuItem item = menu.findItem(R.id.id_check);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //banco de dados aqui adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Toast.makeText(getApplicationContext(), "adicionando algo na lista", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+
+    public boolean loadFragment(Fragment fragment ){
         //LOAD DO FRAGMENTO ESOLHIDO
         if (fragment != null){
             getSupportFragmentManager()

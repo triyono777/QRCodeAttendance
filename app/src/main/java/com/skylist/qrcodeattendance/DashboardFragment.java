@@ -72,7 +72,7 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    void fillList(){
+    public void fillList(){
         dataset.add( new AttendanceModel( "Matheus Pantoja Filgueira", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
         dataset.add( new AttendanceModel( "Matheus", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
         dataset.add( new AttendanceModel( "Matheus", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
