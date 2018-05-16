@@ -1,5 +1,6 @@
 package com.skylist.qrcodeattendance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,12 +16,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         //CARREGA O PRIMEIRO FRAGMENTO
         loadFragment( new DashboardFragment() );
+        toolbar.setTitle( R.string.title_dashboard );
     }
 
     @Override
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.option_menu, menu);
         MenuItem item = menu.findItem(R.id.id_check);
-        SearchView searchView = (SearchView) item.getActionView();
+        /*SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return false;
             }
         });
+        */
 
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -82,14 +87,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch ( item.getItemId() ){
             case R.id.navigation_dashboard:
                 fragment = new DashboardFragment();
-                break;
+                toolbar.setTitle( R.string.title_dashboard );
+            break;
             case R.id.navigation_student:
                 fragment = new StudentFragment();
+                toolbar.setTitle( R.string.title_student );
                 break;
             case R.id.navigation_profile:
-                fragment = new DashboardFragment();
+                fragment = new ProfileFragment();
+                toolbar.setTitle( R.string.title_profile );
                 break;
         }
         return loadFragment( fragment );
+    }
+
+    //REPASSA O RESULTADO PARA O FRAGMENTO
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 }

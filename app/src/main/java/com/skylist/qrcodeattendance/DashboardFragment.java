@@ -1,6 +1,8 @@
 package com.skylist.qrcodeattendance;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,47 +30,61 @@ public class DashboardFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<AttendanceModel> dataset;
-    private FloatingActionButton addAttendance;
-    Context context;
+    private FloatingActionButton fab_addCheck;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate( R.layout.fragment_dashboard, container, false);
+        view = inflater.inflate( R.layout.fragment_dashboard, container, false);
 
         dataset         = new ArrayList<AttendanceModel>();
         recyclerView    = view.findViewById(R.id.recyclerView);
-        //addAttendance   = view.findViewById(R.id.id_add_attendance);
-        Log.i("TAG", String.valueOf(container.findViewById(R.id.recyclerView)));
+        fab_addCheck    = view.findViewById(R.id.fab_add_check);
 
-        fillList();
-        updateRecycleView();
-/*
-        addAttendance.setOnClickListener(new View.OnClickListener() {
+        fab_addCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if( view.getId() == R.id.id_add_attendance ) {
-                    fillList();
-                    updateRecycleView();
-                }
+                scanCode();
             }
         });
-*/
+
+        updateRecycleView();
+
         return view;
     }
 
+    //ESPERA A LEITURA DA CAMERA ACONTECER PARA PREENCHER O ARRAY
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        this.context = getActivity().getApplicationContext();
+        IntentResult result = IntentIntegrator.parseActivityResult( requestCode, resultCode, data );
+        String dataQR[] =  new String[4];
+        if(result != null){
+            if(result.getContents() != null){
+                dataQR = result.getContents().split(";");
+                dataQR[2] = "Dispositivos moveis";
+                dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
+
+                dataset.add( new AttendanceModel( dataQR ) );
+                updateRecycleView();
+            }
+        }
     }
 
-    public void initializeVars(View view ){
-
+    //ABRE A CAMERA PARA COMEÇAR O SCAN DO QRCODE DO ALUNO
+    public void scanCode(){
+        Log.i("resposta", "start scan" );
+        IntentIntegrator integrator = new IntentIntegrator( getActivity() );
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Point at the student QRCode");
+        integrator.setCameraId(0);
+        integrator.initiateScan();
     }
 
+    //FAZ O UPDATE DO RECYCLEVIEW
     public void updateRecycleView(){
         layoutManager = new LinearLayoutManager( getActivity() );
         recyclerView.setLayoutManager(layoutManager);
@@ -72,9 +92,4 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    public void fillList(){
-        dataset.add( new AttendanceModel( "Matheus Pantoja Filgueira", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
-        dataset.add( new AttendanceModel( "Matheus", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
-        dataset.add( new AttendanceModel( "Matheus", "10101010", "Dispositivos Moveis", "https://mylogo.com" ) );
-    }
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
@@ -31,7 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.registrationNumber.setText(item.getRegistrationNumber());
         holder.subject.setText(item.getSubject());
         holder.date.setText(item.getDate());
-        //Picasso.get.load( item.getInstituctionURL() ).resize(80,80).into(holder.instituctImage);
+        Picasso.get().load( item.getInstituctionURL() ).resize(80,80).into(holder.instituctImage);
     }
 
     @Override
