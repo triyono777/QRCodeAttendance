@@ -9,6 +9,7 @@ import java.util.Date;
 public class AttendanceModel {
 
     private String studentName, registrationNumber, subject, instituctionURL, date;
+    private int id;
 
     AttendanceModel(){}
 
@@ -36,12 +37,13 @@ public class AttendanceModel {
         this.date                   = getDateTime();
     }
 
-    AttendanceModel( @Nullable String data[], String subject, String instituctionURL ){
+    AttendanceModel( @Nullable String data[], String subject, String instituctionURL, int id ){
         this.studentName            = data[0] ;
         this.registrationNumber     = data[1];
         this.subject                = subject;
         this.instituctionURL        = instituctionURL;
         this.date                   = getDateTime();
+        this.id                     = id;
     }
 
     private String getDateTime(){
@@ -86,5 +88,13 @@ public class AttendanceModel {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
