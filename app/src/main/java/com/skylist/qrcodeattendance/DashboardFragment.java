@@ -162,6 +162,7 @@ public class DashboardFragment extends Fragment {
                 dataQR[2] = sharedPreferences.getString("subject_name", "someone_subject");
                 dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
                 saveNewPresence( currentDate+"-"+dataQR[1] , dataQR[0], dataQR[1], dataQR[2], dataQR[3] );
+
                 updateRecycleView();
             }
         }
