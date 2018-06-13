@@ -15,7 +15,7 @@ import java.util.Date;
 public class AttendanceModel {
 
     private String studentName, registrationNumber, subject, instituctionURL, date;
-    private int id;
+    private String id;
     private Context context;
 
     AttendanceModel(){}
@@ -24,7 +24,7 @@ public class AttendanceModel {
         this.context = context;
     }
 
-    AttendanceModel( int id, String studentName, String registrationNumber, String subject, String instituctionURL, String date){
+    AttendanceModel( String id, String studentName, String registrationNumber, String subject, String instituctionURL, String date){
         this.id                     = id;
         this.studentName            = studentName ;
         this.registrationNumber     = registrationNumber;
@@ -57,7 +57,7 @@ public class AttendanceModel {
         this.date                   = getDateTime();
     }
 
-    AttendanceModel( @Nullable String data[], String subject, String instituctionURL, int id ){
+    AttendanceModel( @Nullable String data[], String subject, String instituctionURL, String id ){
         this.studentName            = data[0] ;
         this.registrationNumber     = data[1];
         this.subject                = subject;
@@ -110,11 +110,11 @@ public class AttendanceModel {
         this.date = date;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

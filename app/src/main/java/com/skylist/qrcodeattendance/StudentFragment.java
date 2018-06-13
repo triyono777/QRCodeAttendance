@@ -93,7 +93,7 @@ public class StudentFragment extends Fragment {
 
         //CHECAGEM PARA N GERAR UM QR CODE VAZIO
         if( !name.equals("") ){
-            text = name +";"+registration;
+            text = name.toUpperCase() +";"+registration.toUpperCase();
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try{ //É CRIADO UM BITMAP PARA ARMAZENAR O QRCODE GERADO, E DEPOIS É COLOCADO NO LUGAR DO IMAGEVIEW NO FRAGMENTO

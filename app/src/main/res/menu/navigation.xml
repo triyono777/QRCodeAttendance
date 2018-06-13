@@ -5,16 +5,21 @@
 
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/ic_scan_qrcode"
-        android:title="@string/title_dashboard" />
+        android:title="@string/title_dashboard"
+        android:iconTint="#ffffff"
+        
+        />
 
     <item
         android:id="@+id/navigation_student"
         android:icon="@drawable/ic_qr_code"
-        android:title="@string/title_student" />
+        android:title="@string/title_student"
+        android:iconTint="#ffffff"/>
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_person"
-        android:title="@string/title_profile" />
+        android:title="@string/title_profile"
+        android:iconTint="#ffffff"/>
 
 </menu>

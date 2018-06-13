@@ -3,6 +3,7 @@ package com.skylist.qrcodeattendance;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -46,27 +47,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.option_menu, menu);
-        MenuItem item = menu.findItem(R.id.id_check);
-        /*SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        MenuItem item1 = menu.findItem(R.id.id_dash_menu);
+        MenuItem item2 = menu.findItem(R.id.id_student_menu);
+        MenuItem item3 = menu.findItem(R.id.id_profile_menu);
 
+
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public boolean onQueryTextChange(String newText) {
-                //banco de dados aqui adapter.getFilter().filter(newText);
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                loadFragment( new DashboardFragment() );
+                toolbar.setTitle( R.string.title_dashboard );
                 return false;
             }
         });
-        */
-
-
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        item2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Toast.makeText(getApplicationContext(), "adicionando algo na lista", Toast.LENGTH_SHORT).show();
+                loadFragment( new StudentFragment());
+
+                toolbar.setTitle( R.string.title_student );
+                return false;
+            }
+        });
+        item3.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                loadFragment( new ProfileFragment());
+                toolbar.setTitle( R.string.title_profile );
                 return false;
             }
         });

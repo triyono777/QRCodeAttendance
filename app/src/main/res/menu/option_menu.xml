@@ -3,7 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:title="Check" android:id="@+id/id_check"/>
-    <item android:title="Options" android:id="@+id/id_options"/>
-    <item android:id="@+id/id_menu_search" android:title="Search" android:icon="@drawable/ic_scan_qrcode" app:actionViewClass="android.widget.SearchView" app:showAsAction="always"/>
+    <item
+        android:id="@+id/id_dash_menu"
+        android:title="Dashboard" />
+    <item
+        android:id="@+id/id_student_menu"
+        android:title="Student" />
+    <item
+        android:id="@+id/id_profile_menu"
+        android:title="Profile" />
 </menu>

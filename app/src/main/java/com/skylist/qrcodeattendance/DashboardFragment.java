@@ -3,6 +3,7 @@ package com.skylist.qrcodeattendance;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
@@ -32,13 +36,19 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class DashboardFragment extends Fragment {
+
+    private EditText search_text;
+    private Button search_button;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -47,18 +57,23 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton fab_addCheck;
     private View view;
 
-    FirebaseDatabase db;
+    private FirebaseDatabase db;
     private DatabaseReference mDatabase;
+    final static String PREFS_NAME = "SUBJECT_DATA";
+    String pathBD = "0";
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate( R.layout.fragment_dashboard, container, false);
+        view            = inflater.inflate( R.layout.fragment_dashboard, container, false);
+
+        search_text = view.findViewById(R.id.id_search_all);
+        search_button = view.findViewById(R.id.id_bsearch);
 
         db              = FirebaseDatabase.getInstance();
-        mDatabase   = FirebaseDatabase.getInstance().getReference();
+        mDatabase       = FirebaseDatabase.getInstance().getReference();
 
         dataset         = new ArrayList<AttendanceModel>();
         recyclerView    = view.findViewById(R.id.recyclerView);
@@ -71,8 +86,22 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( search_text.getText().toString().equals("") ){
+                    loadListFirebase();
+                }
+                for(Iterator<AttendanceModel> it = dataset.iterator(); it.hasNext();){
+                    if( !it.next().getStudentName().contains( search_text.getText().toString().toUpperCase() ) )
+                        it.remove();
+                }
+                updateRecycleView();
+
+            }
+        });
+
         loadListFirebase();
-        //updateRecycleView();
 
         return view;
     }
@@ -90,7 +119,6 @@ public class DashboardFragment extends Fragment {
                 }
 
                 updateRecycleView();
-
             }
 
             @Override
@@ -101,20 +129,16 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    public void saveNewPresence( int id, String nome, String regNumber, String subject , String url){
+    public void saveNewPresence( String id, String nome, String regNumber, String subject , String url){
 
         String currentDate = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss").format(new Date());
-        //String date[] = currentDate.split("-");
+        String date[] = currentDate.split("-");
 
         DatabaseReference myref = db.getReference("presenca");
+        pathBD = (String)currentDate+"-"+regNumber;
 
         AttendanceModel attendanceModel = new AttendanceModel( id, nome, regNumber, subject, url, currentDate );
         myref.child(currentDate+"-"+regNumber).setValue(attendanceModel);
-        /*
-        CheckDoDia cd = new CheckDoDia( institution, passOfDay, preceptor, materia,date[0]+"-"+date[1]+"-"+date[2], date[3] );
-        myref.child("students").child( mAuth.getCurrentUser().getUid() ).child("MATERIAS").child(currentDate).setValue(cd);
-        myref.child("students").child(mAuth.getCurrentUser().getUid()).child("name").setValue( mAuth.getCurrentUser().getDisplayName() );
-        */
     }
 
     //ESPERA A LEITURA DA CAMERA ACONTECER PARA PREENCHER O ARRAY
@@ -122,8 +146,12 @@ public class DashboardFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
         IntentResult result = IntentIntegrator.parseActivityResult( requestCode, resultCode, data );
         String dataQR[] =  new String[4];
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss").format(new Date());
+
         if(result != null){
             if(result.getContents() != null){
                 String dataQR2[] = result.getContents().split(";");
@@ -131,13 +159,13 @@ public class DashboardFragment extends Fragment {
                 dataQR[0] = dataQR2[0];
                 dataQR[1] = dataQR2[1];
 
-                dataQR[2] = "Dispositivos moveis";
+                dataQR[2] = sharedPreferences.getString("subject_name", "someone_subject");
                 dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
-                //dataset.add( new AttendanceModel( dataQR ) );
-                saveNewPresence( 10,dataQR[0], dataQR[1], dataQR[2], dataQR[3] );
+                saveNewPresence( currentDate+"-"+dataQR[1] , dataQR[0], dataQR[1], dataQR[2], dataQR[3] );
                 updateRecycleView();
             }
         }
+        updateRecycleView();
     }
 
 
@@ -158,5 +186,4 @@ public class DashboardFragment extends Fragment {
         adapter = new MyAdapter(dataset);
         recyclerView.setAdapter(adapter);
     }
-
 }
