@@ -3,6 +3,7 @@ package com.skylist.qrcodeattendance;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,8 @@ public class DashboardFragment extends Fragment {
     private List<AttendanceModel> dataset;
     private FloatingActionButton fab_addCheck;
     private View view;
+
+    private SQLiteDatabase bd;
 
     @Nullable
     @Override
@@ -64,7 +67,11 @@ public class DashboardFragment extends Fragment {
         String dataQR[] =  new String[4];
         if(result != null){
             if(result.getContents() != null){
-                dataQR = result.getContents().split(";");
+                String dataQR2[] = result.getContents().split(";");
+
+                dataQR[0] = dataQR2[0];
+                dataQR[1] = dataQR2[1];
+
                 dataQR[2] = "Dispositivos moveis";
                 dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
 
