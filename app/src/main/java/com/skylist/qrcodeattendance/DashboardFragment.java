@@ -3,6 +3,7 @@ package com.skylist.qrcodeattendance;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,7 +35,7 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton fab_addCheck;
     private View view;
 
-    private SQLiteDatabase bd;
+
 
     @Nullable
     @Override
@@ -42,6 +43,7 @@ public class DashboardFragment extends Fragment {
 
         view = inflater.inflate( R.layout.fragment_dashboard, container, false);
 
+        //dbHelper = new DBHelper(  );
         dataset         = new ArrayList<AttendanceModel>();
         recyclerView    = view.findViewById(R.id.recyclerView);
         fab_addCheck    = view.findViewById(R.id.fab_add_check);
@@ -74,12 +76,12 @@ public class DashboardFragment extends Fragment {
 
                 dataQR[2] = "Dispositivos moveis";
                 dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
-
                 dataset.add( new AttendanceModel( dataQR ) );
                 updateRecycleView();
             }
         }
     }
+
 
     //ABRE A CAMERA PARA COMEÇAR O SCAN DO QRCODE DO ALUNO
     public void scanCode(){

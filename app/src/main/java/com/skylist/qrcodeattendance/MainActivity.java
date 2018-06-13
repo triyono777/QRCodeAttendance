@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //CARREGA O PRIMEIRO FRAGMENTO
         loadFragment( new DashboardFragment() );
         toolbar.setTitle( R.string.title_dashboard );
+
+        //DBHelper dbHelper = new DBHelper(getApplicationContext());
     }
 
     @Override
