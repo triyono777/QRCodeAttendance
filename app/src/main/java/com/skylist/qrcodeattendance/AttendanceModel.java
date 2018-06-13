@@ -1,8 +1,14 @@
 package com.skylist.qrcodeattendance;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.Nullable;
+import android.widget.ArrayAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,8 +16,22 @@ public class AttendanceModel {
 
     private String studentName, registrationNumber, subject, instituctionURL, date;
     private int id;
+    private Context context;
 
     AttendanceModel(){}
+
+    AttendanceModel(Context context){
+        this.context = context;
+    }
+
+    AttendanceModel( int id, String studentName, String registrationNumber, String subject, String instituctionURL, String date){
+        this.id                     = id;
+        this.studentName            = studentName ;
+        this.registrationNumber     = registrationNumber;
+        this.subject                = subject;
+        this.instituctionURL        = instituctionURL;
+        this.date                   = date;
+    }
 
     AttendanceModel( String studentName, String registrationNumber, String subject, String instituctionURL, String date){
         this.studentName            = studentName ;
@@ -97,4 +117,8 @@ public class AttendanceModel {
     public void setId(int id) {
         this.id = id;
     }
+
+
+
+
 }

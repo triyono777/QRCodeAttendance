@@ -20,11 +20,23 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class DashboardFragment extends Fragment {
 
@@ -35,6 +47,8 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton fab_addCheck;
     private View view;
 
+    FirebaseDatabase db;
+    private DatabaseReference mDatabase;
 
 
     @Nullable
@@ -43,7 +57,9 @@ public class DashboardFragment extends Fragment {
 
         view = inflater.inflate( R.layout.fragment_dashboard, container, false);
 
-        //dbHelper = new DBHelper(  );
+        db              = FirebaseDatabase.getInstance();
+        mDatabase   = FirebaseDatabase.getInstance().getReference();
+
         dataset         = new ArrayList<AttendanceModel>();
         recyclerView    = view.findViewById(R.id.recyclerView);
         fab_addCheck    = view.findViewById(R.id.fab_add_check);
@@ -55,9 +71,50 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        updateRecycleView();
+        loadListFirebase();
+        //updateRecycleView();
 
         return view;
+    }
+
+    public void loadListFirebase(){
+        final List<AttendanceModel> copyBd = new ArrayList<>();
+        Query query1 = mDatabase.child("presenca");
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for( DataSnapshot ds : dataSnapshot.getChildren()){
+                    AttendanceModel cdia = ds.getValue(AttendanceModel.class);
+                    Log.i("SAIDA", cdia.getStudentName()+" ,"+cdia.getSubject()+" ,"+cdia.getDate());
+                    dataset.add(cdia);
+                }
+
+                updateRecycleView();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void saveNewPresence( int id, String nome, String regNumber, String subject , String url){
+
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss").format(new Date());
+        //String date[] = currentDate.split("-");
+
+        DatabaseReference myref = db.getReference("presenca");
+
+        AttendanceModel attendanceModel = new AttendanceModel( id, nome, regNumber, subject, url, currentDate );
+        myref.child(currentDate+"-"+regNumber).setValue(attendanceModel);
+        /*
+        CheckDoDia cd = new CheckDoDia( institution, passOfDay, preceptor, materia,date[0]+"-"+date[1]+"-"+date[2], date[3] );
+        myref.child("students").child( mAuth.getCurrentUser().getUid() ).child("MATERIAS").child(currentDate).setValue(cd);
+        myref.child("students").child(mAuth.getCurrentUser().getUid()).child("name").setValue( mAuth.getCurrentUser().getDisplayName() );
+        */
     }
 
     //ESPERA A LEITURA DA CAMERA ACONTECER PARA PREENCHER O ARRAY
@@ -76,7 +133,8 @@ public class DashboardFragment extends Fragment {
 
                 dataQR[2] = "Dispositivos moveis";
                 dataQR[3] = "https://www.infoescola.com/wp-content/uploads/2017/09/UNITINS-600x423.jpg";
-                dataset.add( new AttendanceModel( dataQR ) );
+                //dataset.add( new AttendanceModel( dataQR ) );
+                saveNewPresence( 10,dataQR[0], dataQR[1], dataQR[2], dataQR[3] );
                 updateRecycleView();
             }
         }

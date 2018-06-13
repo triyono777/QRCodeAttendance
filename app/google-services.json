@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1021818911011",
+    "firebase_url": "https://presenca-app-funciona.firebaseio.com",
+    "project_id": "presenca-app-funciona",
+    "storage_bucket": "presenca-app-funciona.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021818911011:android:c26986d9f8010a2b",
+        "android_client_info": {
+          "package_name": "com.skylist.qrcodeattendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021818911011-rlrglg32t3amsrvkrl4sqe5e6dsep0vv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1021818911011-rlrglg32t3amsrvkrl4sqe5e6dsep0vv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjXpu1upE-8BhhHttyPuCeyrc3VnwZCjQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

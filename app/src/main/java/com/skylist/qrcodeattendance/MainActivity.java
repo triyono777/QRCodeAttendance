@@ -1,6 +1,8 @@
 package com.skylist.qrcodeattendance;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         toolbar.setTitle( R.string.title_dashboard );
 
         //DBHelper dbHelper = new DBHelper(getApplicationContext());
+
+
     }
 
     @Override
